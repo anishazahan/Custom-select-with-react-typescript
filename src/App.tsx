@@ -15,10 +15,13 @@ function App() {
     { label: "Fifth", value: 5 },
   ]
 
+  const [value,setValue] = useState <typeof options[0] | undefined> (options[3])
+  // console.log(value);
+
   return (
     <>
 
-    <Select options={options}></Select>
+    <Select options={options} value={value} onChange={o=>setValue(o)}></Select>
     
     </>
   )
