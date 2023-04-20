@@ -2,16 +2,25 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import Heading from './components/Heading'
+import Select from './Select';
+
 
 function App() {
   
-  const num= 5;
+  const options = [
+    { label: "First", value: 1 },
+    { label: "Second", value: 2 },
+    { label: "Third", value: 3 },
+    { label: "Fourth", value: 4 },
+    { label: "Fifth", value: 5 },
+  ]
 
   return (
-    <div className="App">
-      <Heading title ={"5"}></Heading>
-    </div>
+    <>
+
+    <Select options={options}></Select>
+    
+    </>
   )
 }
 
