@@ -10,6 +10,7 @@
     border-radius: .25em;
     outline: none;
     margin: 5% auto;
+    cursor: pointer;
 }
 
 .container:focus {
