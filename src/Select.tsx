@@ -1,26 +1,56 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './select.module.css'
 
 type selectOption = {
     label : string,
-    value:any
-}
-type selectProps = {
-    options : selectOption[],
-    value?:selectOption,
-    onChange:(value:selectOption | undefined )=>void
+    value: string | number
 }
 
-const Select = ({options,value,onChange}:selectProps) => {
+type MultipleSelectProps = {
+    multiple: true
+    value: selectOption[]
+    onChange: (value: selectOption[]) => void
+  }
+
+type SingleSelectProps = {
+    multiple?: false
+    value?: selectOption
+    onChange: (value: selectOption | undefined) => void
+  }
+
+  type SelectProps = {
+    options: selectOption[]
+  } & (SingleSelectProps | MultipleSelectProps)
+
+const Select = ({multiple,options,value,onChange}:SelectProps) => {
     const [isOpen,setIsOpen] = useState(false)
+    const [highlightedIndex, setHighlightedIndex] = useState(0)
 
         function clearOption(e:any) {
-            e.stopPropagation()
-            onChange(undefined)
+            multiple ? onChange([]) : onChange(undefined)
         }
-        function selectOption(option:selectOption) {
-            onChange(option)
+        function selectOption(option: selectOption) {
+            if (multiple) {
+              if (value.includes(option)) {
+                onChange(value.filter(o => o !== option))
+              } else {
+                onChange([...value, option])
+              }
+            } else {
+              if (option !== value) onChange(option)
+            }
+          }
+
+        function isOptionseleted(option:selectOption) {
+            return option === value;
         }
+        // function setHighlightedIndex(index:number) {
+            
+        // }
+
+        useEffect(() => {
+            if (isOpen) setHighlightedIndex(0)
+          }, [isOpen])
 
 
   return (
@@ -45,7 +75,8 @@ const Select = ({options,value,onChange}:selectProps) => {
                         selectOption(option)
                         setIsOpen(false)
                       }}
-                     className={styles.option} key={index}>{option.label}</li>
+                      onMouseEnter={() => setHighlightedIndex(index)}
+                     className={`${styles.option} ${isOptionseleted(option)? styles.selected : ""}${index === highlightedIndex ? styles.highlighted : ""}`} key={option.value}>{option.label}</li>
                     })
                 }
             </ul>
